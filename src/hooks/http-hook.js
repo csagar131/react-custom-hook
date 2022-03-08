@@ -8,8 +8,6 @@ const useHttp = (applyData) => {
     setIsLoading(true);
     setError(null);
 
-    console.log(requestConfig);
-
     try {
       const response = await fetch(requestConfig.url, {
         method: requestConfig.method ? requestConfig.method : "GET",
@@ -23,7 +21,15 @@ const useHttp = (applyData) => {
 
       const data = await response.json();
 
-      applyData(data);
+      if(requestConfig.method === "POST"){
+        applyData({
+          name : data.name,
+          text : requestConfig.body.text
+        })
+      }
+      else{
+        applyData(data);
+      }
 
     } catch (err) {
       setError(err.message || "Something went wrong!");

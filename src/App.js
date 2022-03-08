@@ -8,8 +8,7 @@ const App = () => {
   const [tasks, setTasks] = useState([]);
 
   const transformData = useCallback((data) => {
-    const loadedTasks = [];
-    console.log(data)
+    const loadedTasks = []
 
     for (const taskKey in data) {
       loadedTasks.push({ id: taskKey, text: data[taskKey].text });
@@ -26,6 +25,7 @@ const App = () => {
   }, [sendRequest]);
 
   const taskAddHandler = (task) => {
+    console.log("calling taskHandler")
     setTasks((prevTasks) => prevTasks.concat(task));
   };
 

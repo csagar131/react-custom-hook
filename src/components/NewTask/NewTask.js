@@ -6,8 +6,10 @@ import useHttp from '../../hooks/http-hook';
 const NewTask = (props) => {
 
   const addTask = (data) => {
+
     const generatedId = data.name; // firebase-specific => "name" contains generated id
     const createdTask = { id: generatedId, text:data.text };
+    
     props.onAddTask(createdTask);
   }
 
