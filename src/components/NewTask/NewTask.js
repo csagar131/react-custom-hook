@@ -1,35 +1,27 @@
-import { useState} from 'react'
 import Section from "../UI/Section";
 import TaskForm from "./TaskForm";
+import useHttp from '../../hooks/http-hook';
 
 
 const NewTask = (props) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+
+  const addTask = (data) => {
+    const generatedId = data.name; // firebase-specific => "name" contains generated id
+    const createdTask = { id: generatedId, text:data.text };
+    props.onAddTask(createdTask);
+  }
+
+  const [sendRequest, isLoading, error] = useHttp(addTask)
 
   const enterTaskHandler = async (taskText) => {
 
-    try{
-      setIsLoading(true)
-      setError(false)
-
-      const response = await fetch('https://react-http-hook-fc541-default-rtdb.firebaseio.com/tasks.json',{
-        method : "POST",
-        body : JSON.stringify({ text: taskText }),
-        headers : {'content-type' : 'application/json'}
-      })
-
-      const data = await response.json()
-      
-      const generatedId = data.name; // firebase-specific => "name" contains generated id
-      const createdTask = { id: generatedId, text: taskText };
-      props.onAddTask(createdTask);
+     const reqObj = {
+      url : 'https://react-http-hook-fc541-default-rtdb.firebaseio.com/tasks.json',
+      method : "POST",
+      body : { text : taskText},
+      headers : {'content-type' : 'application/json'}
     }
-    catch(error){
-      setError(error.message)
-    }
-    setIsLoading(false)
-    
+     sendRequest(reqObj)
   };
 
   return (
